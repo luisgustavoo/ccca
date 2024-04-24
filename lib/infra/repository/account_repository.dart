@@ -15,13 +15,14 @@ class AccountRepositoryDatabase implements AccountRepository {
   }) : _connection = connection;
 
   final DatabaseConnection _connection;
+
   @override
   Future<Account> getAccountByEmail({required String email}) async {
-    final conn = await _connection.instance;
+    final conn = await _connection.open();
     try {
-      final accountData = await conn.execute(
+      final accountData = await conn.query(
         r'select * from cccat16.account where email = $1',
-        parameters: email,
+        [email],
       );
 
       if (accountData.isEmpty) {
@@ -32,7 +33,7 @@ class AccountRepositoryDatabase implements AccountRepository {
 
       return Account.restore(
         row['account_id'].toString(),
-        row['account_id'].toString(),
+        row['name'].toString(),
         row['email'].toString(),
         row['cpf'].toString(),
         row['car_plate'].toString(),
@@ -57,11 +58,11 @@ class AccountRepositoryDatabase implements AccountRepository {
 
   @override
   Future<Account> getAccountById({required String accountId}) async {
-    final conn = await _connection.instance;
+    final conn = await _connection.open();
     try {
-      final accountData = await conn.execute(
+      final accountData = await conn.query(
         r'select * from cccat16.account where account_id = $1',
-        parameters: accountId,
+        [accountId],
       );
 
       if (accountData.isEmpty) {
@@ -72,7 +73,7 @@ class AccountRepositoryDatabase implements AccountRepository {
 
       return Account.restore(
         row['account_id'].toString(),
-        row['account_id'].toString(),
+        row['name'].toString(),
         row['email'].toString(),
         row['cpf'].toString(),
         row['car_plate'].toString(),
@@ -97,11 +98,11 @@ class AccountRepositoryDatabase implements AccountRepository {
 
   @override
   Future<void> saveAccount({required Account account}) async {
-    final conn = await _connection.instance;
+    final conn = await _connection.open();
     try {
-      await conn.execute(
+      await conn.query(
         r'insert into cccat16.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) values ($1, $2, $3, $4, $5, $6, $7)',
-        parameters: [
+        [
           account.accountId,
           account.name,
           account.email,

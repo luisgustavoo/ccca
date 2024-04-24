@@ -16,12 +16,12 @@ class RideRepositoryDatabase implements RideRepository {
   final DatabaseConnection _connection;
   @override
   Future<Ride> getRideById({required String rideId}) async {
-    final conn = await _connection.instance;
+    final conn = await _connection.open();
 
     try {
-      final rideData = await conn.execute(
+      final rideData = await conn.query(
         r'select * from cccat16.ride where ride_id = $1',
-        parameters: [rideId],
+        rideId,
       );
 
       final row = rideData.first.toColumnMap();
@@ -50,14 +50,14 @@ class RideRepositoryDatabase implements RideRepository {
 
   @override
   Future<bool> hasActiveRideByPassengerId({required String passengerId}) async {
-    final conn = await _connection.instance;
+    final conn = await _connection.open();
 
     try {
-      final rideData = await conn.execute(
+      final rideData = await conn.query(
         r'select * from cccat16.ride where passenger_id = $1 and status <> '
         'completed'
         ' ',
-        parameters: [passengerId],
+        passengerId,
       );
 
       return rideData.affectedRows >= 1;
@@ -75,12 +75,12 @@ class RideRepositoryDatabase implements RideRepository {
 
   @override
   Future<void> saveRide({required Ride ride}) async {
-    final conn = await _connection.instance;
+    final conn = await _connection.open();
 
     try {
-      await conn.execute(
+      await conn.query(
         r'insert into cccat16.ride (ride_id, passenger_id, from_lat, from_long, to_lat, to_long, status, date) values ($1, $2, $3, $4, $5, $6, $7, $8)',
-        parameters: [
+        [
           ride.rideId,
           ride.passengerId,
           ride.fromLat,
