@@ -6,16 +6,16 @@ class Account {
     required this.name,
     required this.email,
     required this.cpf,
-    required this.carPlate,
     required this.isPassenger,
     required this.isDriver,
+    this.carPlate,
   });
 
   factory Account.create(
     String name,
     String email,
     String cpf,
-    String carPlate, {
+    String? carPlate, {
     bool isPassenger = false,
     bool isDriver = false,
   }) {
@@ -24,7 +24,7 @@ class Account {
       name: name,
       email: email,
       cpf: cpf,
-      carPlate: carPlate,
+      carPlate: carPlate ?? '',
       isPassenger: isPassenger,
       isDriver: isDriver,
     );
@@ -54,7 +54,7 @@ class Account {
   final String name;
   final String email;
   final String cpf;
-  final String carPlate;
+  final String? carPlate;
   final bool isPassenger;
   final bool isDriver;
 }

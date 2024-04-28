@@ -18,8 +18,6 @@ class Ride {
     double fromLong,
     double toLat,
     double toLong,
-    String status,
-    DateTime date,
   ) {
     return Ride(
       rideId: const Uuid().v1(),
@@ -28,8 +26,8 @@ class Ride {
       fromLong: fromLong,
       toLat: toLat,
       toLong: toLong,
-      status: status,
-      date: date,
+      status: 'requested',
+      date: DateTime.now(),
     );
   }
 

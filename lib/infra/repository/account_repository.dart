@@ -4,8 +4,8 @@ import 'package:exercicio_aula1/domain/account.dart';
 import 'package:exercicio_aula1/infra/database/database_connection.dart';
 
 sealed class AccountRepository {
-  Future<Account> getAccountByEmail({required String email});
-  Future<Account> getAccountById({required String accountId});
+  Future<Account?> getAccountByEmail({required String email});
+  Future<Account?> getAccountById({required String accountId});
   Future<void> saveAccount({required Account account});
 }
 
@@ -17,7 +17,7 @@ class AccountRepositoryDatabase implements AccountRepository {
   final DatabaseConnection _connection;
 
   @override
-  Future<Account> getAccountByEmail({required String email}) async {
+  Future<Account?> getAccountByEmail({required String email}) async {
     final conn = await _connection.open();
     try {
       final accountData = await conn.query(
@@ -26,7 +26,8 @@ class AccountRepositoryDatabase implements AccountRepository {
       );
 
       if (accountData.isEmpty) {
-        throw Exception('User not found');
+        // throw Exception('User not found');
+        return null;
       }
 
       final row = accountData.first.toColumnMap();
@@ -57,7 +58,7 @@ class AccountRepositoryDatabase implements AccountRepository {
   }
 
   @override
-  Future<Account> getAccountById({required String accountId}) async {
+  Future<Account?> getAccountById({required String accountId}) async {
     final conn = await _connection.open();
     try {
       final accountData = await conn.query(
@@ -66,7 +67,8 @@ class AccountRepositoryDatabase implements AccountRepository {
       );
 
       if (accountData.isEmpty) {
-        throw Exception('User not found');
+        // throw Exception('User not found');
+        return null;
       }
 
       final row = accountData.first.toColumnMap();
@@ -126,36 +128,46 @@ class AccountRepositoryDatabase implements AccountRepository {
 }
 
 class AccountRepositoryMemory implements AccountRepository {
-  const AccountRepositoryMemory({
-    this.accounts = const [],
-  });
+  AccountRepositoryMemory({
+    this.accounts,
+  }) {
+    accounts = [];
+  }
 
-  final List<Account> accounts;
+  List<Account>? accounts = [];
 
   @override
-  Future<Account> getAccountByEmail({required String email}) async {
+  Future<Account?> getAccountByEmail({required String email}) async {
     final account = accounts
-        .where(
+        ?.where(
           (account) => account.email == email,
         )
         .toList();
-    return Future.value(account.first);
+
+    if (account?.isEmpty ?? true) {
+      return null;
+    }
+
+    return account!.first;
   }
 
   @override
-  Future<Account> getAccountById({required String accountId}) {
+  Future<Account?> getAccountById({required String accountId}) async {
     final account = accounts
-        .where(
+        ?.where(
           (account) => account.accountId == accountId,
         )
         .toList();
-    return Future.value(account.first);
+    if (account?.isEmpty ?? true) {
+      return null;
+    }
+    return account!.first;
   }
 
   @override
   Future<void> saveAccount({
     required Account account,
   }) async {
-    accounts.add(account);
+    accounts?.add(account);
   }
 }

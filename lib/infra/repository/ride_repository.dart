@@ -21,7 +21,7 @@ class RideRepositoryDatabase implements RideRepository {
     try {
       final rideData = await conn.query(
         r'select * from cccat16.ride where ride_id = $1',
-        rideId,
+        [rideId],
       );
 
       final row = rideData.first.toColumnMap();
@@ -54,10 +54,8 @@ class RideRepositoryDatabase implements RideRepository {
 
     try {
       final rideData = await conn.query(
-        r'select * from cccat16.ride where passenger_id = $1 and status <> '
-        'completed'
-        ' ',
-        passengerId,
+        r'select * from cccat16.ride where passenger_id = $1 and status <> $2 ',
+        [passengerId, 'completed'],
       );
 
       return rideData.affectedRows >= 1;
