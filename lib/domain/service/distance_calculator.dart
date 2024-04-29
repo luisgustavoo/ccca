@@ -1,5 +1,5 @@
-import 'package:exercicio_aula1/domain/position.dart';
-import 'package:exercicio_aula1/domain/segment.dart';
+import 'package:ccca/domain/entity/position.dart';
+import 'package:ccca/domain/vo/segment.dart';
 
 class DistanceCalculator {
   double calculate(List<Position> positions) {

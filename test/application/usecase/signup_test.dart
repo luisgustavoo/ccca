@@ -1,8 +1,8 @@
 import 'dart:math' as math;
-import 'package:exercicio_aula1/application/usecase/get_account.dart';
-import 'package:exercicio_aula1/application/usecase/signup.dart';
-import 'package:exercicio_aula1/infra/geteway/mailer_gateway.dart';
-import 'package:exercicio_aula1/infra/repository/account_repository.dart';
+import 'package:ccca/application/usecase/get_account.dart';
+import 'package:ccca/application/usecase/signup.dart';
+import 'package:ccca/infra/geteway/mailer_gateway.dart';
+import 'package:ccca/infra/repository/account_repository.dart';
 import 'package:test/test.dart';
 
 void main() {

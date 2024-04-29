@@ -1,4 +1,4 @@
-import 'package:exercicio_aula1/domain/vo/coord.dart';
+import 'package:ccca/domain/vo/coord.dart';
 import 'package:uuid/uuid.dart';
 
 class Position {

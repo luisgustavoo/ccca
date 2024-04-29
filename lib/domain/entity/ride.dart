@@ -1,5 +1,5 @@
-import 'package:exercicio_aula1/domain/ride_status.dart';
-import 'package:exercicio_aula1/domain/segment.dart';
+import 'package:ccca/domain/vo/ride_status.dart';
+import 'package:ccca/domain/vo/segment.dart';
 import 'package:uuid/uuid.dart';
 
 class Ride {

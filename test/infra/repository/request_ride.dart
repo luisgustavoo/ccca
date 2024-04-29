@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 
-import 'package:exercicio_aula1/application/usecase/get_ride.dart';
-import 'package:exercicio_aula1/application/usecase/request_ride.dart';
-import 'package:exercicio_aula1/application/usecase/signup.dart';
-import 'package:exercicio_aula1/infra/database/database_connection.dart';
-import 'package:exercicio_aula1/infra/geteway/mailer_gateway.dart';
-import 'package:exercicio_aula1/infra/repository/account_repository.dart';
-import 'package:exercicio_aula1/infra/repository/ride_repository.dart';
+import 'package:ccca/application/usecase/get_ride.dart';
+import 'package:ccca/application/usecase/request_ride.dart';
+import 'package:ccca/application/usecase/signup.dart';
+import 'package:ccca/infra/database/database_connection.dart';
+import 'package:ccca/infra/geteway/mailer_gateway.dart';
+import 'package:ccca/infra/repository/account_repository.dart';
+import 'package:ccca/infra/repository/ride_repository.dart';
 import 'package:test/test.dart';
 
 void main() {

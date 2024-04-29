@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:exercicio_aula1/domain/account.dart';
-import 'package:exercicio_aula1/infra/database/database_connection.dart';
-import 'package:exercicio_aula1/infra/repository/account_repository.dart';
+import 'package:ccca/domain/entity/account.dart';
+import 'package:ccca/infra/database/database_connection.dart';
+import 'package:ccca/infra/repository/account_repository.dart';
 import 'package:test/test.dart';
 
 void main() {

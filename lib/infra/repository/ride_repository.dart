@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:exercicio_aula1/domain/entity/ride.dart';
-import 'package:exercicio_aula1/infra/database/database_connection.dart';
+import 'package:ccca/domain/entity/ride.dart';
+import 'package:ccca/infra/database/database_connection.dart';
 
 abstract class RideRepository {
   Future<void> saveRide({required Ride ride});

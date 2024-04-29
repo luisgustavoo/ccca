@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:exercicio_aula1/domain/coord.dart';
+import 'package:ccca/domain/vo/coord.dart';
 
 class Segment {
   Segment({

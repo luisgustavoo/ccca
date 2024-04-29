@@ -1,5 +1,5 @@
-import 'package:exercicio_aula1/infra/http/account_controller.dart';
-import 'package:exercicio_aula1/infra/http/https_server.dart';
+import 'package:ccca/infra/http/account_controller.dart';
+import 'package:ccca/infra/http/https_server.dart';
 
 Future<void> runApplication() async {
   final httpServer = ShelfAdapter();

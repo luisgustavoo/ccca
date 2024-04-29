@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:exercicio_aula1/domain/account.dart';
-import 'package:exercicio_aula1/infra/database/database_connection.dart';
+import 'package:ccca/domain/entity/account.dart';
+import 'package:ccca/infra/database/database_connection.dart';
 
 sealed class AccountRepository {
   Future<Account?> getAccountByEmail({required String email});

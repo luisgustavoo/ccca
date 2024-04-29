@@ -1,4 +1,4 @@
-import 'package:exercicio_aula1/domain/ride.dart';
+import 'package:ccca/domain/entity/ride.dart';
 
 abstract class RideStatus {
   // RideStatus(this.value);

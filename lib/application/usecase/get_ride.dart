@@ -1,5 +1,5 @@
-import 'package:exercicio_aula1/infra/repository/account_repository.dart';
-import 'package:exercicio_aula1/infra/repository/ride_repository.dart';
+import 'package:ccca/infra/repository/account_repository.dart';
+import 'package:ccca/infra/repository/ride_repository.dart';
 
 class GetRide {
   GetRide({
