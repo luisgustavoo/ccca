@@ -5,4 +5,5 @@ Future<void> runApplication() async {
   final httpServer = ShelfAdapter();
   AccountController(httpServer);
   await httpServer.listen(8080);
+  // print(validate('Luis Gustavo1'));
 }

@@ -13,7 +13,9 @@ void main() {
     final accountRepository = AccountRepositoryMemory();
     final mailerGateway = MailerGatewayMemory();
     signup = Signup(
-        accountRepository: accountRepository, mailerGateway: mailerGateway);
+      accountRepository: accountRepository,
+      mailerGateway: mailerGateway,
+    );
     getAccount = GetAccount(accountRepository: accountRepository);
   });
 

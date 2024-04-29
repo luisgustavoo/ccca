@@ -1,8 +1,19 @@
-class ValidateCpf {
+class Cpf {
+  Cpf(String cpf) : _value = cpf {
+    if (!validate(_value)) {
+      throw Exception('Invalid cpf');
+    }
+  }
+
   final _factoFirstDigit = 10;
   final _factoSecondDigit = 11;
+  late final String _value;
 
-  bool validateCpf(String rawCpf) {
+  String getValue() {
+    return _value;
+  }
+
+  bool validate(String rawCpf) {
     final cpf = _removeNonDigits(rawCpf);
     if (!_isValideLength(cpf)) {
       return false;

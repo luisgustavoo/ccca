@@ -1,3 +1,5 @@
+import 'package:exercicio_aula1/domain/ride_status.dart';
+import 'package:exercicio_aula1/domain/segment.dart';
 import 'package:uuid/uuid.dart';
 
 class Ride {
@@ -8,9 +10,12 @@ class Ride {
     required this.fromLong,
     required this.toLat,
     required this.toLong,
-    required this.status,
     required this.date,
-  });
+    required this.status,
+    this.driverId,
+  }) {
+    rideStatus = RideStatusFactory.create(this, status);
+  }
 
   factory Ride.create(
     String passengerId,
@@ -26,8 +31,8 @@ class Ride {
       fromLong: fromLong,
       toLat: toLat,
       toLong: toLong,
-      status: 'requested',
       date: DateTime.now(),
+      status: 'requested',
     );
   }
 
@@ -38,8 +43,8 @@ class Ride {
     double fromLong,
     double toLat,
     double toLong,
-    String status,
     DateTime date,
+    String status,
   ) {
     return Ride(
       rideId: rideId,
@@ -48,8 +53,8 @@ class Ride {
       fromLong: fromLong,
       toLat: toLat,
       toLong: toLong,
-      status: status,
       date: date,
+      status: status,
     );
   }
 
@@ -59,6 +64,38 @@ class Ride {
   final double fromLong;
   final double toLat;
   final double toLong;
-  final String status;
   final DateTime date;
+  final String status;
+  late RideStatus rideStatus;
+  String? driverId;
+  Segment? segment;
+
+  void accept(String driverId) {
+    rideStatus.accept();
+    this.driverId = driverId;
+  }
+
+  void start() {
+    rideStatus.start();
+  }
+
+  double getFromLat() {
+    return segment?.from.getLat() ?? 0;
+  }
+
+  double getFromLong() {
+    return segment?.from.getLong() ?? 0;
+  }
+
+  double getToLag() {
+    return segment?.to.getLat() ?? 0;
+  }
+
+  double getToLong() {
+    return segment?.to.getLong() ?? 0;
+  }
+
+  String getStatus() {
+    return rideStatus.value;
+  }
 }

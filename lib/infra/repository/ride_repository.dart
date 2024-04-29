@@ -1,12 +1,13 @@
 import 'dart:developer';
 
-import 'package:exercicio_aula1/domain/ride.dart';
+import 'package:exercicio_aula1/domain/entity/ride.dart';
 import 'package:exercicio_aula1/infra/database/database_connection.dart';
 
 abstract class RideRepository {
   Future<void> saveRide({required Ride ride});
   Future<bool> hasActiveRideByPassengerId({required String passengerId});
   Future<Ride> getRideById({required String rideId});
+  Future<void> updateRide({required Ride ride});
 }
 
 class RideRepositoryDatabase implements RideRepository {
@@ -33,8 +34,8 @@ class RideRepositoryDatabase implements RideRepository {
         double.parse(row['from_long'].toString()),
         double.parse(row['to_lat'].toString()),
         double.parse(row['to_long'].toString()),
-        row['status'].toString(),
         DateTime.parse(row['date'].toString()),
+        row['status'].toString(),
       );
     } on Exception catch (e, s) {
       log(
@@ -96,6 +97,27 @@ class RideRepositoryDatabase implements RideRepository {
         stackTrace: s,
       );
       throw Exception('Erro ao registrar corrida');
+    } finally {
+      await conn.close();
+    }
+  }
+
+  @override
+  Future<void> updateRide({required Ride ride}) async {
+    final conn = await _connection.open();
+
+    try {
+      await conn.query(
+        r'update cccat16.ride set status = $1, driver_id = $2 where ride_id = $3',
+        [ride.getStatus(), ride.driverId, ride.rideId],
+      );
+    } on Exception catch (e, s) {
+      log(
+        'Erro ao atualizar corrida',
+        error: e,
+        stackTrace: s,
+      );
+      throw Exception('Erro ao atualizar corrida');
     } finally {
       await conn.close();
     }
