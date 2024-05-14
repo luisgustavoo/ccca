@@ -1,5 +1,5 @@
 import 'package:ccca/domain/entity/account.dart';
-import 'package:ccca/infra/geteway/mailer_gateway.dart';
+import 'package:ccca/infra/gateway/mailer_gateway.dart';
 import 'package:ccca/infra/repository/account_repository.dart';
 
 class Signup {

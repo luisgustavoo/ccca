@@ -1,5 +1,4 @@
 import 'package:ccca/domain/vo/cpf.dart';
-import 'package:postgres/messages.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:ccca/application/usecase/get_account.dart';
 import 'package:ccca/application/usecase/signup.dart';
-import 'package:ccca/infra/geteway/mailer_gateway.dart';
+import 'package:ccca/infra/gateway/mailer_gateway.dart';
 import 'package:ccca/infra/repository/account_repository.dart';
 import 'package:test/test.dart';
 
