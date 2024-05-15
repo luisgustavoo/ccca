@@ -56,4 +56,96 @@ void main() {
     expect(outputGetRide.passengerEmail, signupInput.email);
     await connection.close();
   });
+
+  test('Não deve poder solicitar uma corrida se não for um passageiro',
+      () async {
+    final connection = PgAdapter();
+    final accountRepository = AccountRepositoryDatabase(connection: connection);
+    final rideRepository = RideRepositoryDatabase(connection: connection);
+    final mailerGateway = MailerGatewayMemory();
+    final signup = Signup(
+      accountRepository: accountRepository,
+      mailerGateway: mailerGateway,
+    );
+    final signupInput = SignupInput(
+      name: 'John Doe',
+      email: 'john.doe${math.Random().nextInt(1000)}@gmail.com',
+      cpf: '87748248800',
+      isDriver: true,
+    );
+    final outputSignup = await signup.execute(signupInput);
+    final requestRide = RequestRide(
+      accountRepository: accountRepository,
+      rideRepository: rideRepository,
+    );
+    final requestRideInput = RequestRideInput(
+      passengerId: outputSignup.accountId,
+      fromLat: -27.584905257808835,
+      fromLong: -48.545022195325124,
+      toLat: -27.496887588317275,
+      toLong: -48.522234807851476,
+    );
+    final callRequestRide = requestRide;
+
+    expect(
+      callRequestRide.execute(requestRideInput),
+      throwsA(
+        isA<Exception>().having(
+          (e) => e.toString().replaceAll('Exception: ', ''),
+          'message',
+          'Account is not from a passenger',
+        ),
+      ),
+    );
+
+    await connection.close();
+  });
+
+  test(
+      'Não deve poder solicitar uma corrida se o passageiro já tiver outra corrida ativa',
+      () async {
+    final connection = PgAdapter();
+    final accountRepository = AccountRepositoryDatabase(connection: connection);
+    final rideRepository = RideRepositoryDatabase(connection: connection);
+    final mailerGateway = MailerGatewayMemory();
+    final signup = Signup(
+      accountRepository: accountRepository,
+      mailerGateway: mailerGateway,
+    );
+    final signupInput = SignupInput(
+      name: 'John Doe',
+      email: 'john.doe${math.Random().nextInt(1000)}@gmail.com',
+      cpf: '87748248800',
+      isPassenger: true,
+    );
+    final outputSignup = await signup.execute(signupInput);
+    final requestRide = RequestRide(
+      accountRepository: accountRepository,
+      rideRepository: rideRepository,
+    );
+    final requestRideInput = RequestRideInput(
+      passengerId: outputSignup.accountId,
+      fromLat: -27.584905257808835,
+      fromLong: -48.545022195325124,
+      toLat: -27.496887588317275,
+      toLong: -48.522234807851476,
+    );
+
+    await requestRide.execute(requestRideInput);
+
+    final callRequestRide = requestRide;
+
+    expect(
+      callRequestRide.execute(requestRideInput),
+      throwsA(
+        isA<Exception>().having(
+          (e) => e.toString().replaceAll('Exception: ', ''),
+          'message',
+          'Passenger has an active ride',
+        ),
+      ),
+    );
+
+    await connection.close();
+  });
 }

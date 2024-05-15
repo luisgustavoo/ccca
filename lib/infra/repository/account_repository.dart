@@ -92,6 +92,7 @@ class AccountRepositoryDatabase implements AccountRepository {
         error: e,
         stackTrace: s,
       );
+      print(e);
       throw Exception('Erro a buscar usuário por id');
     } finally {
       await conn.close();
@@ -116,11 +117,11 @@ class AccountRepositoryDatabase implements AccountRepository {
       );
     } on Exception catch (e, s) {
       log(
-        'Erro a buscar usuário por id',
+        'Erro ao criar conta',
         error: e,
         stackTrace: s,
       );
-      throw Exception('Erro a buscar usuário por id');
+      throw Exception('Erro ao criar conta');
     } finally {
       await conn.close();
     }

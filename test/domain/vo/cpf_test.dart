@@ -7,14 +7,15 @@ void main() {
   });
 
   test('Deve testar um cpf inválido', () async {
-    try {
-      Cpf('1234566789123456789');
-    } on Exception catch (e) {
-      expect(e, isNotNull);
-    }
-    // expect(
-    //   Cpf('1234566789123456789'),
-    //   Exception('Invalid cpf'),
-    // );
+    expect(
+      () => Cpf('1234566789123456789'),
+      throwsA(
+        isA<Exception>().having(
+          (e) => e.toString().replaceAll('Exception: ', ''),
+          'message',
+          'Invalid cpf',
+        ),
+      ),
+    );
   });
 }

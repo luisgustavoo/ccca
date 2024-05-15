@@ -1,16 +1,23 @@
+import 'dart:convert';
+
+import 'package:ccca/application/usecase/get_account.dart';
+import 'package:ccca/application/usecase/signup.dart';
 import 'package:ccca/infra/http/https_server.dart';
 import 'package:shelf/shelf.dart';
-import 'package:shelf_router/shelf_router.dart';
-
-part 'account_controller.g.dart';
 
 class AccountController {
-  AccountController(HttpsServer httpServer) : _httpServer = httpServer {
+  AccountController(
+    HttpsServer httpServer,
+    Signup signupInstance,
+    GetAccount getAccount,
+  )   : _httpServer = httpServer,
+        _signup = signupInstance,
+        _getAccount = getAccount {
     _httpServer
       ..register(
         'GET',
-        '/hello',
-        hello,
+        '/accounts',
+        accounts,
       )
       ..register(
         'POST',
@@ -20,15 +27,43 @@ class AccountController {
   }
 
   final HttpsServer _httpServer;
+  final Signup _signup;
+  final GetAccount _getAccount;
 
-  // @Route.post('/signup')
-  Future<Response> hello(Request request) async {
-    return Response.ok('hello');
+  Future<Response> accounts(Request request) async {
+    final requestData =
+        jsonDecode(await request.readAsString()) as Map<String, dynamic>;
+    final input = SignupInput(
+      name: requestData['name'].toString(),
+      email: requestData['email'].toString(),
+      cpf: requestData['cpf'].toString(),
+    );
+    final signup = await _signup.execute(input);
+    final output = <String, dynamic>{
+      'accountId': signup.accountId,
+    };
+
+    return Response.ok(jsonEncode(output));
   }
 
   Future<Response> signup(Request request) async {
-    return Response.ok('signup');
-  }
+    final requestData =
+        jsonDecode(await request.readAsString()) as Map<String, dynamic>;
 
-  // Router get router => _$AccountControllerRouter(this);
+    final input = GetAccountInput(
+      accountId: requestData['accountId'].toString(),
+    );
+    final account = await _getAccount.execute(input);
+    final output = <String, dynamic>{
+      'accountId': account?.accountId,
+      'cpf': account?.cpf,
+      'name': account?.name,
+      'email': account?.email,
+      'carPlate': account?.carPlate,
+      'isPassenger': account?.isPassenger,
+      'isDriver': account?.isDriver,
+    };
+
+    return Response.ok(jsonEncode(output));
+  }
 }

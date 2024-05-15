@@ -21,9 +21,6 @@ class ShelfAdapter implements HttpsServer {
 
   @override
   Future<void> listen(int port) async {
-    //   GetIt.instance.registerSingleton<DatabaseConnection>(
-    //   DatabaseConnection(),
-    // );
     final ip = InternetAddress.anyIPv4;
 
     final handler =
