@@ -16,7 +16,7 @@ class AccountController {
     _httpServer
       ..register(
         'GET',
-        '/accounts',
+        '/accounts/<accountId>',
         accounts,
       )
       ..register(
@@ -30,28 +30,9 @@ class AccountController {
   final Signup _signup;
   final GetAccount _getAccount;
 
-  Future<Response> accounts(Request request) async {
-    final requestData =
-        jsonDecode(await request.readAsString()) as Map<String, dynamic>;
-    final input = SignupInput(
-      name: requestData['name'].toString(),
-      email: requestData['email'].toString(),
-      cpf: requestData['cpf'].toString(),
-    );
-    final signup = await _signup.execute(input);
-    final output = <String, dynamic>{
-      'accountId': signup.accountId,
-    };
-
-    return Response.ok(jsonEncode(output));
-  }
-
-  Future<Response> signup(Request request) async {
-    final requestData =
-        jsonDecode(await request.readAsString()) as Map<String, dynamic>;
-
+  Future<Response> accounts(Request request, String accountId) async {
     final input = GetAccountInput(
-      accountId: requestData['accountId'].toString(),
+      accountId: accountId,
     );
     final account = await _getAccount.execute(input);
     final output = <String, dynamic>{
@@ -66,4 +47,77 @@ class AccountController {
 
     return Response.ok(jsonEncode(output));
   }
+
+  Future<Response> signup(Request request) async {
+    try {
+      final requestData =
+          jsonDecode(await request.readAsString()) as Map<String, dynamic>;
+
+      final isDriver = bool.tryParse(
+            requestData['isDriver'].toString(),
+          ) ??
+          false;
+
+      final hasCarPlate =
+          (requestData['carPlate'] as String?)?.isNotEmpty ?? false;
+
+      if (isDriver && !hasCarPlate) {
+        return Response.badRequest(
+          body: jsonEncode(
+            {'message': 'Parameter carPlate is required'},
+          ),
+        );
+      }
+
+      final input = SignupInput(
+        name: requestData['name'].toString(),
+        email: requestData['email'].toString(),
+        cpf: requestData['cpf'].toString(),
+        carPlate: requestData['carPlate'] as String?,
+        isPassenger: bool.tryParse(
+              requestData['isPassenger'].toString(),
+            ) ??
+            false,
+        isDriver: bool.tryParse(
+              requestData['isDriver'].toString(),
+            ) ??
+            false,
+      );
+      final signup = await _signup.execute(input);
+      final output = <String, dynamic>{
+        'accountId': signup.accountId,
+      };
+
+      return Response.ok(jsonEncode(output));
+    } on Exception catch (e) {
+      return Response(
+        422,
+        body: jsonEncode(
+          {
+            'message': e,
+          },
+        ),
+      );
+    }
+  }
+
+  // Response? _validateRequest(Map<String, dynamic> requestData) {
+  //   final isDriver = bool.tryParse(
+  //         requestData['isDriver'].toString(),
+  //       ) ??
+  //       false;
+
+  //   final hasCarPlate =
+  //       (requestData['carPlate'] as String?)?.isNotEmpty ?? false;
+
+  //   if (isDriver && !hasCarPlate) {
+  //     return Response.badRequest(
+  //       body: jsonEncode(
+  //         {'message': 'Parameter carPlate is required'},
+  //       ),
+  //     );
+  //   }
+
+  //   return null;
+  // }
 }

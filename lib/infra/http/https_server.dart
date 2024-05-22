@@ -9,7 +9,7 @@ abstract class HttpsServer {
   void register(
     String method,
     String url,
-    Future<Response> Function(Request) callback,
+    Function callback,
   );
   Future<void> listen(int port);
 }
@@ -33,7 +33,7 @@ class ShelfAdapter implements HttpsServer {
   void register(
     String method,
     String url,
-    Future<Response> Function(Request) callback,
+    Function callback,
   ) {
     switch (method.toUpperCase()) {
       case 'GET':

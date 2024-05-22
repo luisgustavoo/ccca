@@ -9,7 +9,11 @@ class Account {
     required this.isPassenger,
     required this.isDriver,
     this.carPlate,
-  });
+  }) {
+    if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(name)) {
+      throw Exception('Invalid name');
+    }
+  }
 
   factory Account.create(
     String name,
